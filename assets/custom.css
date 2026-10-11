@@ -43,6 +43,17 @@ article { margin: 0 0 37px; padding: 0; border: 0; }
 .research-figure { margin: 22px 0 17px; }
 .figure-image { display: block; overflow: hidden; border-radius: 6px; background: #fff; }
 .figure-image img { display: block; width: 100%; height: auto; }
+.flow-comparison { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; background: transparent; overflow: visible; }
+.flow-comparison:hover { text-decoration: none; }
+.flow-panel { display: flex; flex-direction: column; align-items: center; padding: 8px 5px 6px; border-radius: 7px; color: var(--ink); }
+.flow-heading { font: 600 13px/1.5 system-ui, sans-serif; white-space: nowrap; }
+.flow-note { margin: 3px 0 10px; color: var(--muted); font: 11px/1.5 system-ui, sans-serif; white-space: nowrap; }
+.flow-panel img { border-radius: 3px; }
+.flow-reference { background: rgba(120,123,121,.06); }
+.flow-own { background: rgba(25,126,156,.09); }
+.flow-own .flow-heading, .flow-own .flow-note { color: var(--link); }
+.flow-own img { outline: 2px solid var(--link); outline-offset: 2px; }
+@media (max-width: 500px), (min-width: 851px) and (max-width: 1000px) { .flow-comparison { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
 .research-figure figcaption { margin-top: 10px; color: var(--muted); font-size: 14px; line-height: 1.5; }
 .emission-maps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .emission-maps .figure-image { border-radius: 5px; }
