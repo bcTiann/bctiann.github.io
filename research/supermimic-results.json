@@ -270,43 +270,22 @@
         "source_end_seconds": 110.0,
         "simulated_continuously_from_frame_zero": true,
         "reference_sha256": "e2a369e92e5ad076c5acffff7bce53157a0e6cd9e7e9f6a08dadfb1eb2928d8f"
-      }
-    ],
-    "display": "Gray: learned policy; blue: reference, with original global positions.",
-    "observed_motion": "Oblique aerial inverted turn, followed by landing and standing; not classified as a standard tucked backflip.",
-    "video": "/assets/supermimic-flip-11000.mp4",
-    "poster": "/assets/supermimic-flip-11000.png",
-    "video_sha256": "bb8c069919dc900018d1d97e9757e64542236296d534e347b5fc54593aea2ad9",
-    "duration_seconds": 6.0,
-    "new_training_or_full_library_evaluation": false
-  },
-  "additional_demonstration": {
-    "checkpoint_iteration": 11000,
-    "checkpoint_sha256": "a308ef8c5c2c1e749456786757a5820a731723c10f6805755ab74f14e3a1c8b3",
-    "training_seed": 0,
-    "rollout_seed": 0,
-    "simulation_backend": "MuJoCo, CPU inference",
-    "clips": [
+      },
       {
         "motion": "fallAndGetUp3_subject1",
         "source_start_seconds": 62.5,
         "source_end_seconds": 71.5,
         "simulated_continuously_from_frame_zero": true,
         "reference_sha256": "fc00701411a270a9ab61c321ba836ba36437c61630c65f8fe276ac851f23ccd7"
-      },
-      {
-        "motion": "jumps1_subject1",
-        "source_start_seconds": 63.5,
-        "source_end_seconds": 70.5,
-        "simulated_continuously_from_frame_zero": true,
-        "reference_sha256": "3f55c1a0f87564044a71817d62dc2a40aa76332aa1cab3f1c817333a197c78c2"
       }
     ],
     "display": "Gray: learned policy; blue: reference, with original global positions.",
-    "video": "/assets/supermimic-challenging-11000.mp4",
-    "poster": "/assets/supermimic-challenging-11000.png",
-    "video_sha256": "2023533baa58a0ddc9debe6de39986e30a0fa906cea92db8149f93e08f864e58",
-    "duration_seconds": 16.0,
-    "new_training_or_full_library_evaluation": false
+    "observed_motion": "Oblique aerial turn and landing, followed by a separate fall-and-get-up motion.",
+    "video": "/assets/supermimic-flip-getup-11000.mp4",
+    "poster": "/assets/supermimic-flip-getup-11000.png",
+    "video_sha256": "abe4399aa50fa7ad4c63b25513068e6f2b6f23ecb6f1e76626973e37748f68b0",
+    "duration_seconds": 15,
+    "new_training_or_full_library_evaluation": false,
+    "assembly": "Lossless concatenation of the two verified policy rollouts, with original timing and labels."
   }
 }
