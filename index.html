@@ -32,10 +32,10 @@
 <p class="result-line"><strong>40/40 reference motions completed</strong> in MuJoCo at the 11,000-update checkpoint, with a macro normalized return of <strong>0.826</strong>.</p>
 <p class="experiment-scope">Single-seed evaluation on the training motion library. The full run completed 12,000 updates; checkpoint results and the training protocol are in the experiment notes.</p>
 <figure class="research-figure">
-<video class="research-video" controls loop muted playsinline preload="metadata" poster="assets/supermimic-challenging-11000.png" width="960" height="540" aria-label="Fall-and-get-up and jump tracking in MuJoCo, using the 11,000-update checkpoint"><source src="assets/supermimic-challenging-11000.mp4" type="video/mp4"><a href="assets/supermimic-challenging-11000.mp4">Watch the policy rollouts</a></video>
-<figcaption>Fall-and-get-up and jump tracking with the 11,000-update policy. Solid robot: policy; blue ghost: reference, retaining its global position. Excerpts from continuous MuJoCo rollouts. <a href="research/supermimic.html?v=20261025-motions#rollout">Source clips and full results ↗</a></figcaption>
+<video class="research-video" controls loop muted playsinline preload="metadata" poster="assets/supermimic-flip-11000.png" width="960" height="540" aria-label="An aerial inverted turn and landing from the 11,000-update policy in MuJoCo"><source src="assets/supermimic-flip-11000.mp4" type="video/mp4"><a href="assets/supermimic-flip-11000.mp4">Watch the policy rollout</a></video>
+<figcaption>An aerial turn and landing in a dance motion, using the 11,000-update policy. Gray: learned policy; blue: reference, retaining its global position. <a href="research/supermimic.html?v=20261025-flip#rollout">More motions, source clips and full results ↗</a></figcaption>
 </figure>
-<div class="project-links"><a class="project-link" href="https://github.com/bcTiann/Uni-SuperMimic">Code ↗</a><a class="project-link" href="research/supermimic.html?v=20261025-motions">Experiment notes ↗</a></div></article>
+<div class="project-links"><a class="project-link" href="https://github.com/bcTiann/Uni-SuperMimic">Code ↗</a><a class="project-link" href="research/supermimic.html?v=20261025-flip">Experiment notes ↗</a></div></article>
 <article id="geora"><div class="entry-top"><span class="type">Personal project</span><span class="date">October 2026</span></div>
 <h3>GeoRA Implementation and GRPO Experiments</h3>
 <p>Implemented <a href="https://aclanthology.org/2026.acl-long.1110/">GeoRA</a> adapters for Qwen2.5-1.5B-Instruct and integrated them with TRL GRPO, including mixed-precision execution and checkpoint recovery. Compared GeoRA with LoRA under matched training settings and evaluated all 500 MATH500 questions.</p>

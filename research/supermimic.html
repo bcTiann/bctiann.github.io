@@ -34,6 +34,8 @@
   .note figure img { display: block; width: 100%; height: auto; border-radius: 6px; }
   .note figcaption { color: var(--muted); font-size: 15px; line-height: 1.5; margin-top: 10px; }
   .note footer { margin-top: 48px; }
+  .note details { margin-top: 22px; }
+  .note summary { color: var(--link); cursor: pointer; }
   @media (max-width: 550px) { .note { padding: 32px 22px 44px; } .note h1 { font-size: 32px; } .lead { font-size: 20px; } th, td { padding: 10px 9px; } .protocol th { width: 31%; } }
 </style>
 </head>
@@ -52,9 +54,16 @@
   <section aria-labelledby="rollout">
     <h2 id="rollout">Policy rollout</h2>
     <figure>
-      <video class="research-video" controls loop muted playsinline preload="metadata" poster="/assets/supermimic-challenging-11000.png" width="960" height="540" aria-label="Actual MuJoCo fall-and-get-up and jump rollouts from my 11,000-update policy"><source src="/assets/supermimic-challenging-11000.mp4" type="video/mp4"><a href="/assets/supermimic-challenging-11000.mp4">Watch the policy rollouts</a></video>
-      <figcaption>Fall-and-get-up: <code>fallAndGetUp3_subject1</code>, seconds 62.5–71.5. Jumping: <code>jumps1_subject1</code>, seconds 63.5–70.5. Each policy rollout is simulated continuously from frame zero before extracting its segment. Solid robot: my 11,000-update policy; blue ghost: reference at its original global position.</figcaption>
+      <video class="research-video" controls loop muted playsinline preload="metadata" poster="/assets/supermimic-flip-11000.png" width="960" height="540" aria-label="An actual MuJoCo aerial inverted turn and landing from my 11,000-update policy"><source src="/assets/supermimic-flip-11000.mp4" type="video/mp4"><a href="/assets/supermimic-flip-11000.mp4">Watch the policy rollout</a></video>
+      <figcaption>Dance clip <code>dance1_subject1</code>, seconds 104–110: an oblique aerial turn and landing. The policy is simulated continuously from frame zero before this extract. Gray: my 11,000-update policy; blue: reference at its original global position.</figcaption>
     </figure>
+    <details>
+      <summary>More examples: fall-and-get-up and jumping</summary>
+      <figure>
+        <video class="research-video" controls loop muted playsinline preload="none" poster="/assets/supermimic-challenging-11000.png" width="960" height="540" aria-label="Additional fall-and-get-up and jump tracking from the same 11,000-update policy"><source src="/assets/supermimic-challenging-11000.mp4" type="video/mp4"><a href="/assets/supermimic-challenging-11000.mp4">Watch more motions</a></video>
+        <figcaption>Fall-and-get-up: <code>fallAndGetUp3_subject1</code>, seconds 62.5–71.5. Jumping: <code>jumps1_subject1</code>, seconds 63.5–70.5. Each rollout starts from frame zero before its extract; the checkpoint and color key are the same as above.</figcaption>
+      </figure>
+    </details>
   </section>
 
   <section aria-labelledby="contribution">
