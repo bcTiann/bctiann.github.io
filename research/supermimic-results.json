@@ -256,5 +256,34 @@
     "final_cpu_checkpoint_finite_tensors": 191,
     "source_and_data_identity_checks_passed": true
   },
-  "interpretation": "Single seed; evaluation uses the same 40 training clips. The 11000 checkpoint was selected after evaluation. No unseen-motion generalization or real-robot claim. The 11000 score/completion and 12000 score/completion are distinct results. Aggregate budget matching does not establish identical backend, sampling trajectories, or numerical precision with the public reference."
+  "interpretation": "Single seed; evaluation uses the same 40 training clips. The 11000 checkpoint was selected after evaluation. No unseen-motion generalization or real-robot claim. The 11000 score/completion and 12000 score/completion are distinct results. Aggregate budget matching does not establish identical backend, sampling trajectories, or numerical precision with the public reference.",
+  "demonstration": {
+    "checkpoint_iteration": 11000,
+    "checkpoint_sha256": "a308ef8c5c2c1e749456786757a5820a731723c10f6805755ab74f14e3a1c8b3",
+    "training_seed": 0,
+    "rollout_seed": 0,
+    "simulation_backend": "MuJoCo, CPU inference",
+    "clips": [
+      {
+        "motion": "fallAndGetUp3_subject1",
+        "source_start_seconds": 62.5,
+        "source_end_seconds": 71.5,
+        "simulated_continuously_from_frame_zero": true,
+        "reference_sha256": "fc00701411a270a9ab61c321ba836ba36437c61630c65f8fe276ac851f23ccd7"
+      },
+      {
+        "motion": "jumps1_subject1",
+        "source_start_seconds": 63.5,
+        "source_end_seconds": 70.5,
+        "simulated_continuously_from_frame_zero": true,
+        "reference_sha256": "3f55c1a0f87564044a71817d62dc2a40aa76332aa1cab3f1c817333a197c78c2"
+      }
+    ],
+    "display": "Gray: learned policy; blue: reference, with original global positions.",
+    "video": "/assets/supermimic-challenging-11000.mp4",
+    "poster": "/assets/supermimic-challenging-11000.png",
+    "video_sha256": "2023533baa58a0ddc9debe6de39986e30a0fa906cea92db8149f93e08f864e58",
+    "duration_seconds": 16.0,
+    "new_training_or_full_library_evaluation": false
+  }
 }
