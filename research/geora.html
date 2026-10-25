@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GeoRA Reimplementation | Baochen Tian</title>
+<meta name="description" content="Baochen Tian's GeoRA reimplementation: a controlled LoRA comparison on Qwen2.5-1.5B-Instruct, MATH500 evaluation, and vLLM/TRL integration.">
+<link rel="stylesheet" href="/assets/custom.css">
+<style>
+  .note { width: min(900px, 100%); margin: auto; padding: 55px 36px 64px; }
+  .note-header { position: static; padding: 0; margin-bottom: 42px; }
+  .back { font-size: 16px; }
+  .eyebrow { color: var(--accent); font: 13px/1.5 system-ui, sans-serif; letter-spacing: .06em; margin: 29px 0 12px; }
+  .note h1 { max-width: 720px; font-size: 40px; margin-bottom: 15px; }
+  .note h2 { font-size: 27px; margin-bottom: 17px; }
+  .note section { margin-bottom: 39px; }
+  .lead { font-size: 21px; line-height: 1.55; }
+  .resources { display: flex; flex-wrap: wrap; gap: 9px 24px; margin: 20px 0 0; font-size: 16px; }
+  .key-result { margin: 24px 0; padding: 19px 22px; background: rgba(25,126,156,.07); border-radius: 7px; }
+  .key-result strong { color: var(--heading); }
+  .key-result p:last-child { margin-bottom: 0; }
+  .table-scroll { overflow-x: auto; margin: 20px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 17px; line-height: 1.45; }
+  caption { text-align: left; color: var(--muted); font-size: 15px; margin-bottom: 11px; }
+  th, td { padding: 11px 13px; text-align: left; vertical-align: top; }
+  thead th { color: var(--heading); font-weight: 600; background: rgba(120,123,121,.09); }
+  tbody tr:nth-child(even) { background: rgba(120,123,121,.045); }
+  .number { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .protocol th { width: 26%; color: var(--heading); font-weight: 500; }
+  .small { color: var(--muted); font-size: 16px; line-height: 1.55; }
+  .note ul { padding-left: 23px; }
+  .note li { margin-bottom: 10px; }
+  .note figure { margin: 23px 0; }
+  .note figure img { display: block; width: 100%; height: auto; border-radius: 6px; }
+  .note figcaption { color: var(--muted); font-size: 15px; line-height: 1.5; margin-top: 10px; }
+  .note footer { margin-top: 48px; }
+  @media (max-width: 550px) { .note { padding: 32px 22px 44px; } .note h1 { font-size: 32px; } .lead { font-size: 20px; } th, td { padding: 10px 9px; } .protocol th { width: 30%; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<main class="note" id="content">
+  <header class="note-header">
+    <a class="back" href="/#research">&larr; Back to research &amp; projects</a>
+    <p class="eyebrow">PERSONAL PROJECT &middot; OCTOBER 2026</p>
+    <h1>GeoRA Reimplementation</h1>
+    <p class="lead">I reimplemented geometry-aware low-rank adaptation for reinforcement learning with verifiable rewards, then compared GeoRA and LoRA under the same short training budget.</p>
+    <p>The method comes from <a href="https://aclanthology.org/2026.acl-long.1110/">Zhang et al., <em>GeoRA: Geometry-Aware Low-Rank Adaptation for RLVR</em> (ACL 2026)</a>. My work covers adapter implementation, GRPO training, controlled evaluation, and generation&ndash;training integration.</p>
+    <div class="resources"><a href="https://github.com/bcTiann/geora-repro">My implementation &rarr;</a><a href="https://aclanthology.org/2026.acl-long.1110/">Original paper &rarr;</a><a href="/research/geora-results.json">Results &amp; protocol (JSON) &rarr;</a></div>
+  </header>
+
+  <section aria-labelledby="contribution">
+    <h2 id="contribution">What I implemented</h2>
+    <ul>
+      <li>GeoRA initialization and forward computation, with frozen residual weights and trainable low-rank adapters, integrated into the TRL GRPO training loop.</li>
+      <li>A matched LoRA comparison, an untrained GeoRA initialization control, independent answer scoring, and checkpoint save/reload checks.</li>
+      <li>A synchronous vLLM/TRL bridge that exports the effective policy weights and verifies the policy loaded by the generation worker before each update.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="protocol">
+    <h2 id="protocol">Training and evaluation</h2>
+    <div class="table-scroll">
+      <table class="protocol">
+        <tbody>
+          <tr><th scope="row">Base model</th><td>Qwen2.5-1.5B-Instruct</td></tr>
+          <tr><th scope="row">Training task</th><td>GSM8K: 7,345 training questions, with a separate 128-question development split</td></tr>
+          <tr><th scope="row">Equal adapter budget</th><td>All-linear targets excluding the output head; rank 16, alpha 32; <strong>18,464,768 trainable parameters</strong> for each method. GeoRA rho: 0.2.</td></tr>
+          <tr><th scope="row">Training budget</th><td><strong>25 updates and 3,200 sampled responses per method</strong> (16 questions &times; 8 responses per update); seed 42; AdamW with learning rate 10<sup>&minus;6</sup></td></tr>
+          <tr><th scope="row">Precision</th><td>BF16 base/frozen residual weights; FP32 trainable adapters and optimizer states</td></tr>
+          <tr><th scope="row">Evaluation</th><td>All 500 MATH500 questions; one greedy response per question; at most 4,096 new tokens; Math-Verify 0.8.0 mathematical-equivalence scoring</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">The checkpoint at update 25 was fixed before MATH500 evaluation. The 128-question GSM8K development results are separate from the MATH500 results below.</p>
+  </section>
+
+  <section aria-labelledby="results">
+    <h2 id="results">MATH500 results</h2>
+    <div class="table-scroll">
+      <table>
+        <caption>Mathematical-equivalence accuracy; identical evaluation protocol for all four models.</caption>
+        <thead><tr><th scope="col">Model</th><th scope="col" class="number">Correct / 500</th><th scope="col" class="number">Accuracy</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Original base model</th><td class="number">270</td><td class="number">54.0%</td></tr>
+          <tr><th scope="row">Untrained GeoRA initialization</th><td class="number">279</td><td class="number">55.8%</td></tr>
+          <tr><th scope="row">LoRA, update 25</th><td class="number">269</td><td class="number">53.8%</td></tr>
+          <tr><th scope="row">GeoRA, update 25</th><td class="number">284</td><td class="number"><strong>56.8%</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="key-result">
+      <p><strong>GeoRA scored 3.0 percentage points above LoRA:</strong> 43 additional correct answers and 28 lost answers, a net gain of 15/500.</p>
+      <p>Paired bootstrap 95% interval: &minus;0.2 to +6.2 points; exact two-sided McNemar <em>p</em> = 0.0959.</p>
+    </div>
+    <figure>
+      <a href="/assets/geora-math500.png"><img src="/assets/geora-math500.png" alt="MATH500 accuracy comparison: base 54.0 percent, untrained GeoRA initialization 55.8 percent, LoRA 53.8 percent, and GeoRA 56.8 percent." loading="lazy"></a>
+      <figcaption>My four-model comparison after the fixed 25-update training budget.</figcaption>
+    </figure>
+    <p>This is a short, single-seed experiment, and the paired interval includes zero. It gives a positive signal for follow-up rather than an established advantage. GeoRA also starts from a different numerical initialization: the trained model is only 1.0 point above its untrained control. That control was reconstructed and checked against the saved frozen residuals, rather than loaded from an original update-zero checkpoint.</p>
+  </section>
+
+  <section aria-labelledby="integration">
+    <h2 id="integration">vLLM/TRL integration check</h2>
+    <p>I separately tested synchronous generation and learning on two devices, initializing each adapter from update 25 with a fresh optimizer. Each method completed <strong>2 updates and 256 responses</strong>, with a 512-token response limit.</p>
+    <p>The checks covered effective-weight export, loaded policy versions 0 &rarr; 1 &rarr; 2, finite sampling probabilities and gradients, changed adapter tensors, and exact checkpoint reload. All 512 responses across both methods were audited. This validates the integration; the shorter response limit and dense diagnostics make it unsuitable for a speedup comparison with the original training run.</p>
+  </section>
+
+  <footer><a href="/#research">Baochen Tian &middot; Research &amp; projects</a> &middot; Results updated 25 October 2026</footer>
+</main>
+</body>
+</html>

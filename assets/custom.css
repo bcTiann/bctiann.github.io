@@ -26,7 +26,7 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 5px; border-ra
 .affiliation { font-size: 17px; margin-bottom: 17px; }
 .department { font-size: 15px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
 .email { font: 13px/1.6 system-ui, sans-serif; overflow-wrap: anywhere; }
-.links { display: flex; gap: 16px; align-items: center; font-size: 16px; margin: 22px 0 39px; }
+.links { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: 16px; margin: 22px 0 39px; }
 .links span { color: var(--muted); opacity: .5; }
 nav { display: flex; flex-direction: column; gap: 12px; font-size: 16px; }
 nav a { color: var(--muted); width: fit-content; }
@@ -40,6 +40,20 @@ article { margin: 0 0 37px; padding: 0; border: 0; }
 .detail { color: var(--ink); }
 .mentor { font-size: 15px; color: var(--muted); line-height: 1.55; margin: 12px 0; }
 .project-link { display: inline-block; font-size: 16px; padding: 0; margin-top: 1px; }
+.project-links { display: flex; flex-wrap: wrap; gap: 8px 23px; }
+.result-line { color: var(--heading); margin: 15px 0 10px; }
+.result-line strong { font-weight: 600; }
+.experiment-scope { color: var(--muted); font-size: 15px; line-height: 1.55; }
+.results-table { width: 100%; border-collapse: separate; border-spacing: 0 4px; margin: 18px 0 10px; font-size: 17px; line-height: 1.5; }
+.results-table th, .results-table td { text-align: left; padding: 9px 13px; font-weight: 400; }
+.results-table thead th { color: var(--muted); font-size: 14px; padding-bottom: 3px; }
+.results-table tbody th { border-radius: 5px 0 0 5px; }
+.results-table tbody td { border-radius: 0 5px 5px 0; }
+.results-table tbody tr { background: rgba(120,123,121,.06); }
+.results-table tbody tr.own-result { background: rgba(25,126,156,.10); color: var(--heading); }
+.results-table td span { color: var(--muted); font-size: 14px; white-space: nowrap; }
+.results-table caption { caption-side: bottom; padding: 8px 0 0; text-align: left; font-size: 14px; line-height: 1.5; color: var(--muted); }
+.research-video { display: block; width: 100%; height: auto; border-radius: 6px; background: #e9edef; }
 .research-figure { margin: 22px 0 17px; }
 .figure-image { display: block; overflow: hidden; border-radius: 6px; background: #fff; }
 .figure-image img { display: block; width: 100%; height: auto; }

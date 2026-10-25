@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "project": "SuperMimic Reproduction",
+  "updated": "2026-10-25",
+  "original_project": "https://supermimic.github.io/",
+  "upstream_implementation": "https://github.com/Motphys/Uni-SuperMimic",
+  "upstream_revision": "bc0f0f3499a12019ec0ea313ff37bbd0a70a6a04",
+  "implementation": "https://github.com/bcTiann/Uni-SuperMimic",
+  "training": {
+    "motion_set": "40 LAFAN1 clips retargeted to Unitree G1",
+    "iterations": 12000,
+    "parallel_environments": 4096,
+    "training_transitions": 122880000,
+    "initial_warmup_transitions": 262144,
+    "world_model_updates": 120000,
+    "actor_updates": 11500,
+    "imagined_horizon": 32,
+    "critic_updates": 230000,
+    "wall_hours_training_only": 24.768720454507402,
+    "physics": "CPU MuJoCo",
+    "learning_backend": "PyTorch MPS; FP32; eager",
+    "seed": 0,
+    "budget_match": "Aggregate data and effective optimization budget derived from the public upstream defaults"
+  },
+  "evaluation": {
+    "motion_count": 40,
+    "same_clips_as_training": true,
+    "start": "First reference frame without added noise",
+    "main_metric": "Unweighted mean of per-clip normalized return",
+    "completion_metric": "Motions reaching their full reference length",
+    "formal_checkpoint_evaluations": 13,
+    "evaluated_after_training": true
+  },
+  "checkpoints": [
+    {
+      "iteration": 0,
+      "clip_mean_normalized_return": 0.0016638943925499916,
+      "frame_weighted_normalized_return": 0.0015841301064938307,
+      "completed_motions": 0,
+      "total_motions": 40,
+      "failed_motions": [
+        "dance1_subject1",
+        "dance1_subject2",
+        "dance1_subject3",
+        "dance2_subject1",
+        "dance2_subject2",
+        "dance2_subject3",
+        "dance2_subject4",
+        "dance2_subject5",
+        "fallAndGetUp1_subject1",
+        "fallAndGetUp1_subject4",
+        "fallAndGetUp1_subject5",
+        "fallAndGetUp2_subject2",
+        "fallAndGetUp2_subject3",
+        "fallAndGetUp3_subject1",
+        "fight1_subject2",
+        "fight1_subject3",
+        "fight1_subject5",
+        "fightAndSports1_subject1",
+        "fightAndSports1_subject4",
+        "jumps1_subject1",
+        "jumps1_subject2",
+        "jumps1_subject5",
+        "run1_subject2",
+        "run1_subject5",
+        "run2_subject1",
+        "run2_subject4",
+        "sprint1_subject2",
+        "sprint1_subject4",
+        "walk1_subject1",
+        "walk1_subject2",
+        "walk1_subject5",
+        "walk2_subject1",
+        "walk2_subject3",
+        "walk2_subject4",
+        "walk3_subject1",
+        "walk3_subject2",
+        "walk3_subject3",
+        "walk3_subject4",
+        "walk3_subject5",
+        "walk4_subject1"
+      ]
+    },
+    {
+      "iteration": 1000,
+      "clip_mean_normalized_return": 0.33161717653274536,
+      "frame_weighted_normalized_return": 0.35104575753211975,
+      "completed_motions": 23,
+      "total_motions": 40,
+      "failed_motions": [
+        "dance1_subject1",
+        "dance1_subject2",
+        "dance2_subject1",
+        "dance2_subject4",
+        "fallAndGetUp1_subject1",
+        "fallAndGetUp1_subject4",
+        "fallAndGetUp1_subject5",
+        "fallAndGetUp2_subject2",
+        "fallAndGetUp2_subject3",
+        "fallAndGetUp3_subject1",
+        "fight1_subject3",
+        "fightAndSports1_subject1",
+        "jumps1_subject2",
+        "walk2_subject3",
+        "walk3_subject1",
+        "walk3_subject3",
+        "walk3_subject4"
+      ]
+    },
+    {
+      "iteration": 2000,
+      "clip_mean_normalized_return": 0.551524817943573,
+      "frame_weighted_normalized_return": 0.578899621963501,
+      "completed_motions": 27,
+      "total_motions": 40,
+      "failed_motions": [
+        "dance1_subject1",
+        "dance2_subject4",
+        "fallAndGetUp1_subject1",
+        "fallAndGetUp1_subject4",
+        "fallAndGetUp1_subject5",
+        "fallAndGetUp2_subject2",
+        "fallAndGetUp2_subject3",
+        "fallAndGetUp3_subject1",
+        "fight1_subject3",
+        "jumps1_subject2",
+        "walk2_subject3",
+        "walk3_subject1",
+        "walk3_subject4"
+      ]
+    },
+    {
+      "iteration": 3000,
+      "clip_mean_normalized_return": 0.6188623309135437,
+      "frame_weighted_normalized_return": 0.6459724307060242,
+      "completed_motions": 29,
+      "total_motions": 40,
+      "failed_motions": [
+        "dance1_subject1",
+        "dance2_subject4",
+        "fallAndGetUp1_subject1",
+        "fallAndGetUp1_subject4",
+        "fallAndGetUp1_subject5",
+        "fallAndGetUp2_subject2",
+        "fallAndGetUp2_subject3",
+        "fallAndGetUp3_subject1",
+        "fight1_subject3",
+        "jumps1_subject2",
+        "walk3_subject1"
+      ]
+    },
+    {
+      "iteration": 4000,
+      "clip_mean_normalized_return": 0.7224017977714539,
+      "frame_weighted_normalized_return": 0.7308601140975952,
+      "completed_motions": 36,
+      "total_motions": 40,
+      "failed_motions": [
+        "dance1_subject1",
+        "fallAndGetUp1_subject1",
+        "fallAndGetUp2_subject2",
+        "jumps1_subject2"
+      ]
+    },
+    {
+      "iteration": 5000,
+      "clip_mean_normalized_return": 0.7568365335464478,
+      "frame_weighted_normalized_return": 0.7641498446464539,
+      "completed_motions": 38,
+      "total_motions": 40,
+      "failed_motions": [
+        "fallAndGetUp1_subject1",
+        "jumps1_subject2"
+      ]
+    },
+    {
+      "iteration": 6000,
+      "clip_mean_normalized_return": 0.7859365940093994,
+      "frame_weighted_normalized_return": 0.790684700012207,
+      "completed_motions": 40,
+      "total_motions": 40,
+      "failed_motions": []
+    },
+    {
+      "iteration": 7000,
+      "clip_mean_normalized_return": 0.7664770483970642,
+      "frame_weighted_normalized_return": 0.7772268652915955,
+      "completed_motions": 37,
+      "total_motions": 40,
+      "failed_motions": [
+        "fallAndGetUp1_subject4",
+        "fallAndGetUp2_subject2",
+        "fallAndGetUp2_subject3"
+      ]
+    },
+    {
+      "iteration": 8000,
+      "clip_mean_normalized_return": 0.814400851726532,
+      "frame_weighted_normalized_return": 0.818193793296814,
+      "completed_motions": 40,
+      "total_motions": 40,
+      "failed_motions": []
+    },
+    {
+      "iteration": 9000,
+      "clip_mean_normalized_return": 0.8003959655761719,
+      "frame_weighted_normalized_return": 0.8059214353561401,
+      "completed_motions": 39,
+      "total_motions": 40,
+      "failed_motions": [
+        "fallAndGetUp2_subject2"
+      ]
+    },
+    {
+      "iteration": 10000,
+      "clip_mean_normalized_return": 0.800685703754425,
+      "frame_weighted_normalized_return": 0.8068630695343018,
+      "completed_motions": 39,
+      "total_motions": 40,
+      "failed_motions": [
+        "fallAndGetUp1_subject5"
+      ]
+    },
+    {
+      "iteration": 11000,
+      "clip_mean_normalized_return": 0.8259965777397156,
+      "frame_weighted_normalized_return": 0.8282071948051453,
+      "completed_motions": 40,
+      "total_motions": 40,
+      "failed_motions": []
+    },
+    {
+      "iteration": 12000,
+      "clip_mean_normalized_return": 0.8297744989395142,
+      "frame_weighted_normalized_return": 0.8323209881782532,
+      "completed_motions": 39,
+      "total_motions": 40,
+      "failed_motions": [
+        "jumps1_subject2"
+      ]
+    }
+  ],
+  "display_checkpoint": 11000,
+  "final_checkpoint": 12000,
+  "upstream_public_reference": {
+    "label": "Motphys public reference; not my run",
+    "clip_mean_normalized_return": 0.827227,
+    "frame_weighted_normalized_return": 0.829952,
+    "completed_motions": 40,
+    "total_motions": 40,
+    "backend": "CUDA/mjwarp; BF16"
+  },
+  "verification": {
+    "planned_transition_and_optimizer_counts_passed": true,
+    "all_13_full_motion_evaluations_passed": true,
+    "final_cpu_checkpoint_finite_tensors": 191,
+    "source_and_data_identity_checks_passed": true
+  },
+  "interpretation": "Single seed; evaluation uses the same 40 training clips. The 11000 checkpoint was selected after evaluation. No unseen-motion generalization or real-robot claim. The 11000 score/completion and 12000 score/completion are distinct results. Aggregate budget matching does not establish identical backend, sampling trajectories, or numerical precision with the public reference."
+}

@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Baochen Tian | Research Assistant at ANU</title>
 <meta name="description" content="Baochen Tian, Research Assistant at the Australian National University. Research and projects in generative modelling and astrophysical simulation post-processing.">
-<link rel="stylesheet" href="assets/custom.css?v=6">
+<link rel="stylesheet" href="assets/custom.css?v=7">
 </head>
 <body>
 <a class="skip" href="#about">Skip to content</a>
@@ -16,17 +16,39 @@
 <p class="affiliation">Australian National University</p>
 <p class="department"><a href="https://rsaa.anu.edu.au/">Research School of Astronomy<br>and Astrophysics</a></p>
 <a class="email" href="mailto:baochen.tian.phys@gmail.com">baochen.tian.phys@gmail.com</a>
-<div class="links"><a href="https://github.com/bcTiann">GitHub ↗</a><span aria-hidden="true">/</span><a href="assets/Baochen_Tian_CV.pdf">CV (PDF) ↗</a></div>
+<div class="links"><a href="https://github.com/bcTiann">GitHub ↗</a><a href="assets/Baochen_Tian_CV.pdf">CV (EN) ↗</a><a href="assets/Baochen_Tian_CV_Chinese.pdf" lang="zh-Hans">简历（中文）↗</a></div>
 <nav aria-label="Sections"><a href="#about">About</a><a href="#research">Research &amp; Projects</a><a href="#education">Education</a><a href="#music">Music</a></nav>
 </header>
 <main>
 <section id="about"><h2>About Me</h2>
-<p>I am a research assistant at the Australian National University, working with Dr. ChongChong He on post-processing simulations run with <a href="https://github.com/quokka-astro/quokka">QUOKKA</a>, a GPU-accelerated radiation hydrodynamics code with adaptive mesh refinement. I completed my Bachelor of Science in Physics at ANU in 2025.</p>
+<p>I am a research assistant at the Australian National University, working with Dr. ChongChong He on post-processing <a href="https://github.com/quokka-astro/quokka">QUOKKA</a> simulations. I completed my Bachelor of Science in Physics at ANU in 2025.</p>
 <p>I am drawn to AI because it opens up new ways to study things I did not previously know how to model—from images and language to the physical world. My current interests include diffusion models, flow matching, and spatial intelligence.</p>
+<p>My recent personal projects explore differentiable world models for humanoid control, reinforcement learning for language models, and flow matching for physical trajectories.</p>
 </section>
-<section id="research"><h2>Research &amp; Projects</h2>
-<article><div class="entry-top"><span class="type">Independent project</span><span class="date">2026</span></div>
-<h3>Flow Matching for Physical Trajectories and Control</h3>
+<section id="research"><h2>Personal Projects</h2>
+<article id="supermimic"><div class="entry-top"><span class="type">Personal project</span><span class="date">October 2026</span></div>
+<h3>SuperMimic Reproduction</h3>
+<p>Trained and evaluated a humanoid motion-tracking controller based on <a href="https://github.com/Motphys/Uni-SuperMimic">UniSuperMimic</a>, a reproduction of <a href="https://supermimic.github.io/">SuperMimic</a>. The policy learns through imagined trajectories in a differentiable world model. I matched the public implementation’s network sizes and effective training budgets on 40 LAFAN1 motions retargeted to the Unitree G1.</p>
+<p class="result-line"><strong>40/40 reference motions completed</strong> in MuJoCo at the 11,000-update checkpoint, with a macro normalized return of <strong>0.826</strong>.</p>
+<p class="experiment-scope">Single-seed evaluation on the training motion library. The full run completed 12,000 updates; checkpoint results and the training protocol are in the experiment notes.</p>
+<figure class="research-figure">
+<video class="research-video" controls loop muted playsinline preload="metadata" poster="assets/supermimic-policy-11000.png" width="960" height="540" aria-label="Walking policy and reference motion in MuJoCo, using the 11,000-update checkpoint"><source src="assets/supermimic-policy-11000.mp4" type="video/mp4"><a href="assets/supermimic-policy-11000.mp4">Watch the policy rollout</a></video>
+<figcaption>Walking in MuJoCo with the 11,000-update policy, seconds 12–18 of a continuous rollout. Solid robot: policy; blue ghost: reference, retaining its global position. <a href="research/supermimic.html">Training curves and full results ↗</a></figcaption>
+</figure>
+<div class="project-links"><a class="project-link" href="https://github.com/bcTiann/Uni-SuperMimic">Code ↗</a><a class="project-link" href="research/supermimic.html">Experiment notes ↗</a></div></article>
+<article id="geora"><div class="entry-top"><span class="type">Personal project</span><span class="date">October 2026</span></div>
+<h3>GeoRA Implementation and GRPO Experiments</h3>
+<p>Implemented <a href="https://aclanthology.org/2026.acl-long.1110/">GeoRA</a> adapters for Qwen2.5-1.5B-Instruct and integrated them with TRL GRPO, including mixed-precision execution and checkpoint recovery. Compared GeoRA with LoRA under matched training settings and evaluated all 500 MATH500 questions.</p>
+<table class="results-table">
+<caption>MATH500 · 25 updates per method · same trainable-parameter budget · single seed.</caption>
+<thead><tr><th scope="col">Method</th><th scope="col">Accuracy</th></tr></thead>
+<tbody><tr><th scope="row">LoRA</th><td>53.8% <span>(269/500)</span></td></tr><tr class="own-result"><th scope="row">GeoRA · my implementation</th><td><strong>56.8%</strong> <span>(284/500)</span></td></tr></tbody>
+</table>
+<p class="result-line"><strong>+3.0 percentage points</strong> over LoRA in this comparison.</p>
+<p>I also validated a synchronous vLLM rollout–TRL learner setup on separate AMD MI250X GPU devices, with two updates per method, policy-weight synchronization and checkpoint reload checks.</p>
+<div class="project-links"><a class="project-link" href="https://github.com/bcTiann/geora-repro">Code ↗</a><a class="project-link" href="research/geora.html">Experiment notes ↗</a></div></article>
+<article id="flow-matching"><div class="entry-top"><span class="type">Personal project</span><span class="date">2026</span></div>
+<h3>Flow Matching Reimplementation of DiffPhyCon</h3>
 <p>Implemented Conditional OT Flow Matching for joint state–control generation in <a href="https://proceedings.neurips.cc/paper_files/paper/2024/hash/07a363fd2263091c2063998e0034999c-Abstract-Conference.html">DiffPhyCon</a> (NeurIPS 2024), a diffusion-based framework for physical system control. Evaluated it on 1D Burgers and 2D Jellyfish tasks alongside diffusion-based baselines.</p>
 <p class="detail">Also explored objective guidance and control-prior reweighting through score-to-velocity adaptations. These experiments remain exploratory.</p>
 <figure class="research-figure">
@@ -39,12 +61,14 @@
 <figcaption>Jellyfish · Normalized horizontal velocity, frame 10, test case 0. Same initial condition and colour scale; jointly generated controls may differ. <a href="assets/jellyfish-vx-all-tests.png">All ten cases &amp; legend ↗</a></figcaption>
 </figure>
 <a class="project-link" href="https://github.com/bcTiann/diffphycon">Code ↗</a></article>
-<article><div class="entry-top"><span class="type">Australian National University</span><span class="date">July 2025–present</span></div>
+<h2 class="subsection">Research Experience</h2>
+<article id="quokka"><div class="entry-top"><span class="type">Australian National University</span><span class="date">July 2025–present</span></div>
 <h3>Python Pipeline for Post-processing QUOKKA Simulations</h3>
 <p class="detail">Research Assistant · April 2026–present</p>
-<p><a href="https://github.com/quokka-astro/quokka">QUOKKA</a> is a <strong>GPU-native</strong> code for high-resolution simulations of star formation and galaxies. In the team’s <a href="https://en.westlake.edu.cn/news_events/EventCalendars/science/202511/P020251104517771671701.pdf#page=10">primordial-star formation comparison</a>, QUOKKA on GPUs ran <strong>over 50× faster than the widely used <a href="https://flash.rochester.edu/">FLASH</a> code on CPUs</strong>, with the same simulation setup. Adaptive mesh refinement lets it resolve fine gas structures within a large galactic environment, while jointly modelling gas dynamics, magnetic fields, radiation, gravity, <a href="https://github.com/grackle-project/grackle">Grackle</a>-based cooling, and stellar feedback.</p>
-<p>I am developing a Python pipeline that converts 3D simulation snapshots into synthetic emission-line maps and spectra for comparison with astronomical observations. It combines <a href="https://bitbucket.org/krumholz/despotic">DESPOTIC</a>, <a href="https://gitlab.nublado.org/cloudy/cloudy">Cloudy</a> and analytic emission models, with thermal line broadening and dust attenuation.</p>
+<p>I am developing a reusable Python post-processing pipeline for <a href="https://github.com/quokka-astro/quokka">QUOKKA</a>, a next-generation GPU-native astrophysical hydrodynamics code. It covers 3D data loading, chunked computation, analysis and visualization, producing synthetic images, spectra and statistics for comparison with astronomical observations and testing of physical models.</p>
+<p>The pipeline combines <a href="https://bitbucket.org/krumholz/despotic">DESPOTIC</a>, <a href="https://gitlab.nublado.org/cloudy/cloudy">Cloudy</a> and analytic emission models, with thermal line broadening and dust attenuation.</p>
 <p class="detail">I use these synthetic observations to investigate how reliably CO, Hα, C⁺ and H I line widths recover the mass-weighted velocity dispersion of simulated gas, and how this depends on the gas phase.</p>
+<p class="mentor">QUOKKA combines adaptive mesh refinement with radiation, magnetic fields, gravity, <a href="https://github.com/grackle-project/grackle">Grackle</a>-based cooling and stellar feedback. The team’s <a href="https://en.westlake.edu.cn/news_events/EventCalendars/science/202511/P020251104517771671701.pdf#page=10">primordial-star formation comparison</a> reports a GPU speedup of over 50× relative to FLASH on CPUs for the same setup.</p>
 <figure class="research-figure">
 <div class="emission-maps">
 <a class="figure-image" href="assets/quokka-halpha.png" aria-label="View the full-size H alpha emission map"><img src="assets/quokka-halpha.png" alt="Intrinsic H alpha luminosity map from the QUOKKA post-processing pipeline, with position axes in kiloparsecs and a logarithmic luminosity scale." width="1011" height="835" loading="lazy"></a>
@@ -53,7 +77,6 @@
 <figcaption>Pipeline-generated intrinsic Hα and C II 158 μm emission maps from the same QUOKKA snapshot. Each line uses its own luminosity scale.</figcaption>
 </figure>
 <p class="mentor">Supervisor: Dr. ChongChong He</p><a class="project-link" href="https://github.com/bcTiann/quokka_postprocess_3D">Code ↗</a></article>
-<h2 class="subsection">Previous Research</h2>
 <article class="compact"><div class="entry-top"><span class="type">National Taiwan University</span><span class="date">Feb–Jun 2025</span></div>
 <h3>Deep Learning for Cosmic Microwave Background Inpainting</h3>
 <p>Applied Transformers and diffusion models to reconstruct cosmic microwave background maps masked by the galactic plane. Evaluated reconstruction using the angular power spectrum, C<sub>ℓ</sub>.</p>

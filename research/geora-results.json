@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "project": "GeoRA Reimplementation",
+  "updated": "2026-10-25",
+  "original_paper": "https://aclanthology.org/2026.acl-long.1110/",
+  "implementation": "https://github.com/bcTiann/geora-repro",
+  "training": {
+    "base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "task": "GSM8K",
+    "training_questions": 7345,
+    "separate_development_questions": 128,
+    "seed": 42,
+    "updates_per_method": 25,
+    "sampled_responses_per_method": 3200,
+    "trainable_parameters_per_method": 18464768,
+    "rank": 16,
+    "alpha": 32,
+    "geora_rho": 0.2,
+    "target": "all-linear excluding lm_head",
+    "optimizer": "AdamW",
+    "learning_rate": 1e-06,
+    "precision": "BF16 base and fixed residuals; FP32 trainable adapters and optimizer states"
+  },
+  "evaluation": {
+    "dataset": "HuggingFaceH4/MATH-500",
+    "dataset_revision": "6e4ed1a2a79af7d8630a6b768ec859cb5af4d3be",
+    "questions": 500,
+    "decoding": "greedy; one response per question",
+    "max_new_tokens": 4096,
+    "primary_scorer": "Math-Verify 0.8.0 mathematical equivalence; precision 6",
+    "checkpoint_fixed_before_evaluation": true
+  },
+  "results": [
+    {
+      "model": "original",
+      "label": "Original base model",
+      "questions": 500,
+      "correct": 270,
+      "accuracy": 0.54,
+      "wilson_95_interval": [
+        0.4961751552930624,
+        0.5832148974700135
+      ],
+      "strict_boxed_correct": 261,
+      "strict_boxed_accuracy": 0.522
+    },
+    {
+      "model": "geora_initial",
+      "label": "Untrained GeoRA initialization (reconstructed)",
+      "questions": 500,
+      "correct": 279,
+      "accuracy": 0.558,
+      "wilson_95_interval": [
+        0.5141915296492833,
+        0.6009240468571767
+      ],
+      "strict_boxed_correct": 273,
+      "strict_boxed_accuracy": 0.546
+    },
+    {
+      "model": "lora",
+      "label": "LoRA update 25",
+      "questions": 500,
+      "correct": 269,
+      "accuracy": 0.538,
+      "wilson_95_interval": [
+        0.494176845283715,
+        0.581243704841207
+      ],
+      "strict_boxed_correct": 265,
+      "strict_boxed_accuracy": 0.53
+    },
+    {
+      "model": "geora_mixed",
+      "label": "GeoRA update 25",
+      "questions": 500,
+      "correct": 284,
+      "accuracy": 0.568,
+      "wilson_95_interval": [
+        0.5242253434338132,
+        0.6107377462634155
+      ],
+      "strict_boxed_correct": 283,
+      "strict_boxed_accuracy": 0.566
+    }
+  ],
+  "primary_comparison": {
+    "candidate": "geora_mixed",
+    "baseline": "lora",
+    "candidate_only_correct": 43,
+    "baseline_only_correct": 28,
+    "difference_percentage_points": 3.0,
+    "paired_bootstrap_95_interval_percentage_points": [
+      -0.2,
+      6.2
+    ],
+    "bootstrap_replicates": 20000,
+    "exact_mcnemar_two_sided_p": 0.09592363141082376
+  },
+  "vllm_trl_integration": {
+    "scope": "Synchronous generation/learning integration; separate diagnostic initialized from checkpoint 25 with a fresh optimizer",
+    "updates_per_method": 2,
+    "responses_per_method": 256,
+    "max_completion_tokens": 512,
+    "methods": {
+      "lora": {
+        "audit_passed": true,
+        "optimizer_updates": 2,
+        "responses": 256,
+        "generated_tokens": 59971,
+        "eos_terminated": 252,
+        "length_truncated": 4,
+        "versions": [
+          0,
+          1,
+          2
+        ],
+        "source_frozen_and_reload_exact": true
+      },
+      "geora_mixed": {
+        "audit_passed": true,
+        "optimizer_updates": 2,
+        "responses": 256,
+        "generated_tokens": 69151,
+        "eos_terminated": 250,
+        "length_truncated": 6,
+        "versions": [
+          0,
+          1,
+          2
+        ],
+        "source_frozen_and_reload_exact": true
+      }
+    },
+    "controlled_speedup_claim": false,
+    "new_accuracy_claim": false
+  },
+  "interpretation": "Short, single-seed comparison. The paired interval includes zero. The initialization control is reconstructed and is not a saved original checkpoint zero. MATH500 results are separate from the 128-question GSM8K development results."
+}

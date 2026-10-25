@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SuperMimic Reproduction | Baochen Tian</title>
+<meta name="description" content="Baochen Tian's SuperMimic reproduction: learned dynamics and policy training, matched training budgets, and evaluation on 40 LAFAN1/G1 motion clips.">
+<link rel="stylesheet" href="/assets/custom.css">
+<style>
+  .note { width: min(900px, 100%); margin: auto; padding: 55px 36px 64px; }
+  .note-header { position: static; padding: 0; margin-bottom: 42px; }
+  .back { font-size: 16px; }
+  .eyebrow { color: var(--accent); font: 13px/1.5 system-ui, sans-serif; letter-spacing: .06em; margin: 29px 0 12px; }
+  .note h1 { max-width: 720px; font-size: 40px; margin-bottom: 15px; }
+  .note h2 { font-size: 27px; margin-bottom: 17px; }
+  .note section { margin-bottom: 39px; }
+  .lead { font-size: 21px; line-height: 1.55; }
+  .resources { display: flex; flex-wrap: wrap; gap: 9px 24px; margin: 20px 0 0; font-size: 16px; }
+  .key-result { margin: 24px 0; padding: 19px 22px; background: rgba(25,126,156,.07); border-radius: 7px; }
+  .key-result strong { color: var(--heading); }
+  .key-result p:last-child { margin-bottom: 0; }
+  .table-scroll { overflow-x: auto; margin: 20px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 17px; line-height: 1.45; }
+  caption { text-align: left; color: var(--muted); font-size: 15px; margin-bottom: 11px; }
+  th, td { padding: 11px 13px; text-align: left; vertical-align: top; }
+  thead th { color: var(--heading); font-weight: 600; background: rgba(120,123,121,.09); }
+  tbody tr:nth-child(even) { background: rgba(120,123,121,.045); }
+  .number { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .protocol th { width: 27%; color: var(--heading); font-weight: 500; }
+  .small { color: var(--muted); font-size: 16px; line-height: 1.55; }
+  .note ul { padding-left: 23px; }
+  .note li { margin-bottom: 10px; }
+  .note figure { margin: 23px 0; }
+  .note figure img { display: block; width: 100%; height: auto; border-radius: 6px; }
+  .note figcaption { color: var(--muted); font-size: 15px; line-height: 1.5; margin-top: 10px; }
+  .note footer { margin-top: 48px; }
+  @media (max-width: 550px) { .note { padding: 32px 22px 44px; } .note h1 { font-size: 32px; } .lead { font-size: 20px; } th, td { padding: 10px 9px; } .protocol th { width: 31%; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<main class="note" id="content">
+  <header class="note-header">
+    <a class="back" href="/#research">&larr; Back to research &amp; projects</a>
+    <p class="eyebrow">PERSONAL PROJECT &middot; OCTOBER 2026</p>
+    <h1>SuperMimic Reproduction</h1>
+    <p class="lead">I trained a learned dynamics model and humanoid motion-tracking policy on 40 LAFAN1/G1 clips, then evaluated every scheduled checkpoint across the full motion set.</p>
+    <p>This project builds on <a href="https://supermimic.github.io/">SuperMimic</a> and <a href="https://github.com/Motphys/Uni-SuperMimic">Motphys&rsquo; Uni-SuperMimic implementation</a>. My work focuses on running and checking the model-training loop, preserving the effective training budget, and evaluating motion coverage.</p>
+    <div class="resources"><a href="https://github.com/bcTiann/Uni-SuperMimic">My implementation &rarr;</a><a href="https://supermimic.github.io/">Original paper &amp; project &rarr;</a><a href="https://github.com/Motphys/Uni-SuperMimic">Upstream implementation &rarr;</a><a href="/research/supermimic-results.json">Results &amp; protocol (JSON) &rarr;</a></div>
+  </header>
+
+  <section aria-labelledby="rollout">
+    <h2 id="rollout">Policy rollout</h2>
+    <figure>
+      <video class="research-video" controls loop muted playsinline preload="metadata" poster="/assets/supermimic-policy-11000.png" width="960" height="540" aria-label="A genuine MuJoCo walking rollout from my 11,000-update policy"><source src="/assets/supermimic-policy-11000.mp4" type="video/mp4"><a href="/assets/supermimic-policy-11000.mp4">Watch the policy rollout</a></video>
+      <figcaption>Walking clip <code>walk1_subject1</code>, seconds 12–18. The policy is simulated continuously from frame zero before this extract. Solid robot: my 11,000-update policy; blue ghost: reference at its original global position.</figcaption>
+    </figure>
+  </section>
+
+  <section aria-labelledby="contribution">
+    <h2 id="contribution">What I worked on</h2>
+    <p>The world model learns from simulator transitions. The actor is trained through 32-step imagined rollouts, using gradients through the learned dynamics rather than through the physics simulator.</p>
+    <ul>
+      <li>Ran the joint world-model, actor, and critic training loop with the aggregate data and effective optimization budgets derived from the public upstream defaults.</li>
+      <li>Implemented actor microbatching while retaining all 32 imagined steps and accumulating gradients before one effective optimizer update; checked losses, gradients, optimizer state, and sample ordering against the full-batch path.</li>
+      <li>Added explicit training/sample counters, finite-state and checkpoint checks, and complete 40-motion evaluation at all 13 scheduled checkpoints.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="protocol">
+    <h2 id="protocol">Experiment protocol</h2>
+    <div class="table-scroll">
+      <table class="protocol">
+        <tbody>
+          <tr><th scope="row">Motion set</th><td>40 LAFAN1 clips retargeted to the Unitree G1; the same clips are used for training and evaluation</td></tr>
+          <tr><th scope="row">Training run</th><td><strong>12,000 learner iterations, 4,096 environments, and 122.88 million new training transitions</strong>; an additional 262,144 transitions for initial warmup</td></tr>
+          <tr><th scope="row">Effective model budget</th><td>120,000 world-model updates; 11,500 actor updates through 32-step imagined rollouts; 230,000 critic updates</td></tr>
+          <tr><th scope="row">Training time</th><td><strong>24.77 hours</strong>; checkpoint evaluations ran separately after training</td></tr>
+          <tr><th scope="row">Evaluation</th><td>All 40 clips, once from their first frame without added noise; mean normalized return across clips, with full-length completion reported separately</td></tr>
+          <tr><th scope="row">Runtime</th><td>CPU MuJoCo physics and FP32 PyTorch MPS training; the upstream reference uses CUDA/mjwarp and BF16</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="results">
+    <h2 id="results">Results</h2>
+    <div class="table-scroll">
+      <table>
+        <caption>Normalized return is a clip-wise mean. Completion counts motions executed to their full reference length.</caption>
+        <thead><tr><th scope="col">Model</th><th scope="col" class="number">Mean return</th><th scope="col" class="number">Completed</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">My checkpoint, iteration 11,000</th><td class="number"><strong>0.825997</strong></td><td class="number"><strong>40 / 40</strong></td></tr>
+          <tr><th scope="row">My final checkpoint, iteration 12,000</th><td class="number">0.829774</td><td class="number">39 / 40</td></tr>
+          <tr><th scope="row">Motphys public reference</th><td class="number">0.827227</td><td class="number">40 / 40</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="key-result">
+      <p><strong>The 11,000-iteration checkpoint completed all 40 motions</strong> with a mean normalized return of 0.825997, including all six fall-and-get-up clips.</p>
+      <p>The final checkpoint had a higher mean return but one jump ended at 98.2% of its reference duration. These are two distinct checkpoint results.</p>
+    </div>
+    <figure>
+      <a href="/assets/supermimic-training.png"><img src="/assets/supermimic-training.png" alt="SuperMimic training and evaluation curves across the 12,000-iteration run, with return and failed-motion counts at scheduled checkpoints." loading="lazy"></a>
+      <figcaption>All 13 scheduled checkpoints, including the untrained control. Full completion was achieved at iterations 6,000, 8,000, and 11,000; it did not improve monotonically.</figcaption>
+    </figure>
+    <p>The 11,000-iteration checkpoint was selected after evaluating the same training clips. This single-seed run measures tracking coverage on those 40 motions; it does not establish unseen-motion generalization or real-robot performance. The Motphys row is its published reference, not one of my runs. Matching the public aggregate budget does not make the backends, numerical precision, or sampling trajectories identical.</p>
+  </section>
+
+  <section aria-labelledby="verification">
+    <h2 id="verification">What I checked</h2>
+    <p>I reconstructed each evaluation&rsquo;s clip-wise mean, frame-weighted score, completion count, and failure duration from the saved results. The final run reached its planned transition and optimizer-update counts, and all 13 full-motion evaluations completed. A separate CPU reload confirmed that all 191 saved tensors were finite, and source/data identity checks passed.</p>
+    <p class="small">The comparison uses the <a href="https://github.com/Motphys/Uni-SuperMimic/tree/bc0f0f3499a12019ec0ea313ff37bbd0a70a6a04">fixed Motphys public revision</a>. The small 40-clip experiment is separate from the much larger motion library reported in the original SuperMimic paper.</p>
+  </section>
+
+  <footer><a href="/#research">Baochen Tian &middot; Research &amp; projects</a> &middot; Results updated 25 October 2026</footer>
+</main>
+</body>
+</html>
