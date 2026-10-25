@@ -37,12 +37,12 @@
 </figure>
 <div class="project-links"><a class="project-link" href="https://github.com/bcTiann/Uni-SuperMimic">Code ↗</a><a class="project-link" href="research/supermimic.html?v=20261025-selected">Experiment notes ↗</a></div></article>
 <article id="geora"><div class="entry-top"><span class="type">Personal project</span><span class="date">October 2026</span></div>
-<h3>GeoRA Implementation and GRPO Experiments</h3>
-<p>Implemented <a href="https://aclanthology.org/2026.acl-long.1110/">GeoRA</a> adapters for Qwen2.5-1.5B-Instruct and integrated them with TRL GRPO, including mixed-precision execution and checkpoint recovery. Compared GeoRA with LoRA under matched training settings and evaluated all 500 MATH500 questions.</p>
+<h3>GeoRA Reimplementation and GRPO Experiments</h3>
+<p>Reimplemented <a href="https://aclanthology.org/2026.acl-long.1110/">GeoRA</a> from the original paper for Qwen2.5-1.5B-Instruct and integrated it with TRL GRPO, including mixed-precision execution and checkpoint recovery. Compared GeoRA with LoRA under matched training settings and evaluated all 500 MATH500 questions.</p>
 <table class="results-table">
 <caption>MATH500 · 25 updates per method · same trainable-parameter budget · single seed.</caption>
 <thead><tr><th scope="col">Method</th><th scope="col">Accuracy</th></tr></thead>
-<tbody><tr><th scope="row">LoRA</th><td>53.8% <span>(269/500)</span></td></tr><tr class="own-result"><th scope="row">GeoRA · my implementation</th><td><strong>56.8%</strong> <span>(284/500)</span></td></tr></tbody>
+<tbody><tr><th scope="row">LoRA</th><td>53.8% <span>(269/500)</span></td></tr><tr class="own-result"><th scope="row">GeoRA · reimplementation</th><td><strong>56.8%</strong> <span>(284/500)</span></td></tr></tbody>
 </table>
 <p class="result-line"><strong>+3.0 percentage points</strong> over LoRA in this comparison.</p>
 <p>I also validated a synchronous vLLM rollout–TRL learner setup on separate AMD MI250X GPU devices, with two updates per method, policy-weight synchronization and checkpoint reload checks.</p>
