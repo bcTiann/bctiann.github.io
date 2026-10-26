@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "project": "SuperMimic Reproduction",
-  "updated": "2026-10-25",
+  "project": "SuperMimic Reproduction and Video-to-Robot Adaptation",
+  "updated": "2026-10-26",
   "original_project": "https://supermimic.github.io/",
   "upstream_implementation": "https://github.com/Motphys/Uni-SuperMimic",
   "upstream_revision": "bc0f0f3499a12019ec0ea313ff37bbd0a70a6a04",
@@ -287,5 +287,477 @@
     "duration_seconds": 15,
     "new_training_or_full_library_evaluation": false,
     "assembly": "Lossless concatenation of the two verified policy rollouts, with original timing and labels."
+  },
+  "video_adaptation": {
+    "pipeline": [
+      "Monocular RGB video",
+      "GVHMR human-motion recovery",
+      "GMR retargeting to Unitree G1",
+      "MotionLib reference import",
+      "SuperMimic fine-tuning",
+      "MuJoCo evaluation"
+    ],
+    "contribution": "Integration tooling, reference export and quality checks, pretrained checkpoint transfer, per-clip adaptation, and matched physical evaluation.",
+    "components": {
+      "human_motion_recovery": "https://github.com/zju3dv/GVHMR",
+      "recovery_runtime": "https://github.com/ryanrudes/gvhmr/tree/e3876097a9c4d9c1758d058d9e70c64f0cdba4c4",
+      "robot_retargeting": "https://github.com/YanjieZe/GMR/tree/25f56db79ac411258b377b6d4ccba0c8ff3372ac"
+    },
+    "training": {
+      "initial_checkpoint_iteration": 11000,
+      "initial_checkpoint_sha256": "a308ef8c5c2c1e749456786757a5820a731723c10f6805755ab74f14e3a1c8b3",
+      "independent_model_per_video": true,
+      "seed": 0,
+      "iterations_per_clip": 5000,
+      "world_model_only_iterations": 100,
+      "actor_updates_per_clip": 4900,
+      "training_transitions_per_clip": 400000,
+      "initial_warmup_transitions_per_clip": 2048,
+      "tennis_resume_refill_transitions": 2048,
+      "world_model_updates_per_clip": 50000,
+      "physics": "CPU MuJoCo",
+      "learning_backend": "CPU FP32 PyTorch",
+      "evaluation_interval": 500
+    },
+    "evaluation_scope": "One deterministic evaluation of the same training reference per checkpoint, starting from the reference first frame.",
+    "clips": [
+      {
+        "id": "tennis",
+        "label": "Tennis serve",
+        "source_video": "https://github.com/ryanrudes/gvhmr/blob/e3876097a9c4d9c1758d058d9e70c64f0cdba4c4/docs/example_video/tennis.mp4",
+        "motion_sha256": "861e856fb3e1cd14a3a3da01f6c71bce455b950ab1cf58561b62380a2b2098f1",
+        "source_frames": 312,
+        "source_fps": 30.0,
+        "final_checkpoint_sha256": "c0f807498673d3fd1acb89cb44fff5c6e70346f14918434de9e6610c40075181",
+        "before": {
+          "iteration": 0,
+          "norm_return": 0.6968216896057129,
+          "root_position_rmse_m": 0.29096585512161255,
+          "joint_position_rmse_rad": 0.18854573369026184,
+          "expected_steps": 518,
+          "completed_entire_clip": true,
+          "completion_fraction": 1.0,
+          "n_failed": 0
+        },
+        "after": {
+          "iteration": 5000,
+          "norm_return": 0.8359130024909973,
+          "root_position_rmse_m": 0.27630895376205444,
+          "joint_position_rmse_rad": 0.14772817492485046,
+          "expected_steps": 518,
+          "completed_entire_clip": true,
+          "completion_fraction": 1.0,
+          "n_failed": 0
+        },
+        "scheduled_evaluations": [
+          {
+            "iteration": 0,
+            "norm_return": 0.6968216896057129,
+            "root_position_rmse_m": 0.29096585512161255,
+            "joint_position_rmse_rad": 0.18854573369026184,
+            "expected_steps": 518,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 500,
+            "norm_return": 0.7573533654212952,
+            "root_position_rmse_m": 0.24942533671855927,
+            "joint_position_rmse_rad": 0.22208407521247864,
+            "expected_steps": 518,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 1000,
+            "norm_return": 0.8187828063964844,
+            "root_position_rmse_m": 0.25567588210105896,
+            "joint_position_rmse_rad": 0.14801520109176636,
+            "expected_steps": 518,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 1500,
+            "norm_return": 0.8286850452423096,
+            "root_position_rmse_m": 0.22701197862625122,
+            "joint_position_rmse_rad": 0.15257173776626587,
+            "expected_steps": 518,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 2000,
+            "norm_return": 0.8239263296127319,
+            "root_position_rmse_m": 0.3103867769241333,
+            "joint_position_rmse_rad": 0.14316096901893616,
+            "expected_steps": 518,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 2500,
+            "norm_return": 0.811458170413971,
+            "root_position_rmse_m": 0.46809783577919006,
+            "joint_position_rmse_rad": 0.14607849717140198,
+            "expected_steps": 518,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 3000,
+            "norm_return": 0.8209638595581055,
+            "root_position_rmse_m": 0.31472402811050415,
+            "joint_position_rmse_rad": 0.13922205567359924,
+            "expected_steps": 518,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 3500,
+            "norm_return": 0.8291870355606079,
+            "root_position_rmse_m": 0.37907543778419495,
+            "joint_position_rmse_rad": 0.13797488808631897,
+            "expected_steps": 518,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 4000,
+            "norm_return": 0.8333512544631958,
+            "root_position_rmse_m": 0.3487643897533417,
+            "joint_position_rmse_rad": 0.15577316284179688,
+            "expected_steps": 518,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 4500,
+            "norm_return": 0.8285525441169739,
+            "root_position_rmse_m": 0.3217499852180481,
+            "joint_position_rmse_rad": 0.1440403312444687,
+            "expected_steps": 518,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 5000,
+            "norm_return": 0.8359130024909973,
+            "root_position_rmse_m": 0.27630895376205444,
+            "joint_position_rmse_rad": 0.14772817492485046,
+            "expected_steps": 518,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          }
+        ]
+      },
+      {
+        "id": "taiji",
+        "label": "Tai chi",
+        "source_video": "https://raw.githubusercontent.com/jeffffffli/HybrIK/main/examples/taiji.mp4",
+        "motion_sha256": "4364dc08232698c525d286eb51f652dace11393bdd4a39b1ae1dad48c14fe318",
+        "source_frames": 240,
+        "source_fps": 30.0,
+        "final_checkpoint_sha256": "473e06aec57788a8181f2110e9862eda50b276be98fc1fce9b4d0c131d37908f",
+        "before": {
+          "iteration": 0,
+          "norm_return": 0.8044885396957397,
+          "root_position_rmse_m": 0.1512371003627777,
+          "joint_position_rmse_rad": 0.15145468711853027,
+          "expected_steps": 398,
+          "completed_entire_clip": true,
+          "completion_fraction": 1.0,
+          "n_failed": 0
+        },
+        "after": {
+          "iteration": 5000,
+          "norm_return": 0.9116591811180115,
+          "root_position_rmse_m": 0.060452900826931,
+          "joint_position_rmse_rad": 0.10429800301790237,
+          "expected_steps": 398,
+          "completed_entire_clip": true,
+          "completion_fraction": 1.0,
+          "n_failed": 0
+        },
+        "scheduled_evaluations": [
+          {
+            "iteration": 0,
+            "norm_return": 0.8044885396957397,
+            "root_position_rmse_m": 0.1512371003627777,
+            "joint_position_rmse_rad": 0.15145468711853027,
+            "expected_steps": 398,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 500,
+            "norm_return": 0.8618465065956116,
+            "root_position_rmse_m": 0.07093856483697891,
+            "joint_position_rmse_rad": 0.15872038900852203,
+            "expected_steps": 398,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 1000,
+            "norm_return": 0.896442174911499,
+            "root_position_rmse_m": 0.1116151511669159,
+            "joint_position_rmse_rad": 0.11112717539072037,
+            "expected_steps": 398,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 1500,
+            "norm_return": 0.8941525816917419,
+            "root_position_rmse_m": 0.11459726840257645,
+            "joint_position_rmse_rad": 0.11892065405845642,
+            "expected_steps": 398,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 2000,
+            "norm_return": 0.9100949764251709,
+            "root_position_rmse_m": 0.06716478615999222,
+            "joint_position_rmse_rad": 0.10156310349702835,
+            "expected_steps": 398,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 2500,
+            "norm_return": 0.9013774394989014,
+            "root_position_rmse_m": 0.10841570794582367,
+            "joint_position_rmse_rad": 0.10996156185865402,
+            "expected_steps": 398,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 3000,
+            "norm_return": 0.9078810811042786,
+            "root_position_rmse_m": 0.07296131551265717,
+            "joint_position_rmse_rad": 0.10016795992851257,
+            "expected_steps": 398,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 3500,
+            "norm_return": 0.901166558265686,
+            "root_position_rmse_m": 0.13450628519058228,
+            "joint_position_rmse_rad": 0.10506068915128708,
+            "expected_steps": 398,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 4000,
+            "norm_return": 0.904691219329834,
+            "root_position_rmse_m": 0.1137717142701149,
+            "joint_position_rmse_rad": 0.09836174547672272,
+            "expected_steps": 398,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 4500,
+            "norm_return": 0.9162508845329285,
+            "root_position_rmse_m": 0.04670558124780655,
+            "joint_position_rmse_rad": 0.09531883895397186,
+            "expected_steps": 398,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 5000,
+            "norm_return": 0.9116591811180115,
+            "root_position_rmse_m": 0.060452900826931,
+            "joint_position_rmse_rad": 0.10429800301790237,
+            "expected_steps": 398,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          }
+        ]
+      },
+      {
+        "id": "hybrik_dance",
+        "label": "Dance",
+        "source_video": "https://raw.githubusercontent.com/Jeff-sjtu/HybrIK/main/examples/dance.mp4",
+        "motion_sha256": "2f6dd6f150a4e91376ef4a9f73765a13f450e039dd6626583be96c61c50fce46",
+        "source_frames": 300,
+        "source_fps": 30.0,
+        "final_checkpoint_sha256": "d9fffa42a6d9ee3f87038550aa30270c94e657db2ec0c7d22f78d08aa418f44a",
+        "before": {
+          "iteration": 0,
+          "norm_return": 0.7070313692092896,
+          "root_position_rmse_m": 0.7127306461334229,
+          "joint_position_rmse_rad": 0.20804943144321442,
+          "expected_steps": 498,
+          "completed_entire_clip": true,
+          "completion_fraction": 1.0,
+          "n_failed": 0
+        },
+        "after": {
+          "iteration": 5000,
+          "norm_return": 0.8619350790977478,
+          "root_position_rmse_m": 0.24685122072696686,
+          "joint_position_rmse_rad": 0.14619062840938568,
+          "expected_steps": 498,
+          "completed_entire_clip": true,
+          "completion_fraction": 1.0,
+          "n_failed": 0
+        },
+        "scheduled_evaluations": [
+          {
+            "iteration": 0,
+            "norm_return": 0.7070313692092896,
+            "root_position_rmse_m": 0.7127306461334229,
+            "joint_position_rmse_rad": 0.20804943144321442,
+            "expected_steps": 498,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 500,
+            "norm_return": 0.7463264465332031,
+            "root_position_rmse_m": 0.34948232769966125,
+            "joint_position_rmse_rad": 0.21313509345054626,
+            "expected_steps": 498,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 1000,
+            "norm_return": 0.8274255394935608,
+            "root_position_rmse_m": 0.32929953932762146,
+            "joint_position_rmse_rad": 0.16623654961585999,
+            "expected_steps": 498,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 1500,
+            "norm_return": 0.8585695028305054,
+            "root_position_rmse_m": 0.24845921993255615,
+            "joint_position_rmse_rad": 0.13139735162258148,
+            "expected_steps": 498,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 2000,
+            "norm_return": 0.8687362670898438,
+            "root_position_rmse_m": 0.19332191348075867,
+            "joint_position_rmse_rad": 0.14514091610908508,
+            "expected_steps": 498,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 2500,
+            "norm_return": 0.8293518424034119,
+            "root_position_rmse_m": 0.37884488701820374,
+            "joint_position_rmse_rad": 0.14935070276260376,
+            "expected_steps": 498,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 3000,
+            "norm_return": 0.8804452419281006,
+            "root_position_rmse_m": 0.17340290546417236,
+            "joint_position_rmse_rad": 0.12850233912467957,
+            "expected_steps": 498,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 3500,
+            "norm_return": 0.8261817693710327,
+            "root_position_rmse_m": 0.35273194313049316,
+            "joint_position_rmse_rad": 0.1461942493915558,
+            "expected_steps": 498,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 4000,
+            "norm_return": 0.8827048540115356,
+            "root_position_rmse_m": 0.18054336309432983,
+            "joint_position_rmse_rad": 0.15336313843727112,
+            "expected_steps": 498,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 4500,
+            "norm_return": 0.8701360821723938,
+            "root_position_rmse_m": 0.18885445594787598,
+            "joint_position_rmse_rad": 0.14612947404384613,
+            "expected_steps": 498,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          },
+          {
+            "iteration": 5000,
+            "norm_return": 0.8619350790977478,
+            "root_position_rmse_m": 0.24685122072696686,
+            "joint_position_rmse_rad": 0.14619062840938568,
+            "expected_steps": 498,
+            "completed_entire_clip": true,
+            "completion_fraction": 1.0,
+            "n_failed": 0
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      "Per-video adaptation, not unseen-video generalization or one policy jointly trained on these three videos.",
+      "Raw reconstructed references retain height/contact errors.",
+      "Tennis concerns body-motion tracking, without racket or ball interaction."
+    ],
+    "demonstration": {
+      "video": "/assets/supermimic-video-adaptation.mp4",
+      "poster": "/assets/supermimic-video-adaptation.jpg",
+      "video_sha256": "65faded914361367d5e6f096ffbb02dc94861d68804f6697a874f6d72b476f45",
+      "poster_sha256": "f38de050cfa60d11341b8a08751f4c821027624833a865e168060d53fefc019a",
+      "duration_seconds": 10.36,
+      "display": "Left: pretrained tracker; right: tennis-adapted checkpoint 5000. Gray: actual MuJoCo trajectory; blue: video-derived reference. Shared camera and timeline.",
+      "rendering": "Re-rendered saved physical rollout states; no new training or simulation."
+    }
   }
 }

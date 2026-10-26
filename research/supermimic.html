@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SuperMimic Reproduction | Baochen Tian</title>
-<meta name="description" content="Baochen Tian's SuperMimic reproduction: learned dynamics and policy training, matched training budgets, and evaluation on 40 LAFAN1/G1 motion clips.">
+<title>SuperMimic Reproduction and Video-to-Robot Adaptation | Baochen Tian</title>
+<meta name="description" content="Baochen Tian's video-to-robot motion pipeline: GVHMR recovery, GMR retargeting, SuperMimic adaptation and MuJoCo evaluation, alongside a 40-motion reproduction.">
 <link rel="stylesheet" href="/assets/custom.css?v=7">
 <style>
   .note { width: min(900px, 100%); margin: auto; padding: 55px 36px 64px; }
@@ -43,14 +43,37 @@
   <header class="note-header">
     <a class="back" href="/#research">&larr; Back to research &amp; projects</a>
     <p class="eyebrow">PERSONAL PROJECT &middot; OCTOBER 2026</p>
-    <h1>SuperMimic Reproduction</h1>
-    <p class="lead">I trained a learned dynamics model and humanoid motion-tracking policy on 40 LAFAN1/G1 clips, then evaluated every scheduled checkpoint across the full motion set.</p>
-    <p>This project builds on <a href="https://supermimic.github.io/">SuperMimic</a> and <a href="https://github.com/Motphys/Uni-SuperMimic">Motphys&rsquo; Uni-SuperMimic implementation</a>. My work focuses on running and checking the model-training loop, preserving the effective training budget, and evaluating motion coverage.</p>
-    <div class="resources"><a href="https://github.com/bcTiann/Uni-SuperMimic">My implementation &rarr;</a><a href="https://supermimic.github.io/">Original paper &amp; project &rarr;</a><a href="https://github.com/Motphys/Uni-SuperMimic">Upstream implementation &rarr;</a><a href="/research/supermimic-results.json">Results &amp; protocol (JSON) &rarr;</a></div>
+    <h1>SuperMimic Reproduction and Video-to-Robot Adaptation</h1>
+    <p class="lead">I connected human-motion recovery from video, G1 motion retargeting, and SuperMimic fine-tuning into a working pipeline, then evaluated the learned controllers in MuJoCo.</p>
+    <p>This project builds on <a href="https://supermimic.github.io/">SuperMimic</a> and <a href="https://github.com/Motphys/Uni-SuperMimic">Motphys&rsquo; Uni-SuperMimic implementation</a>. My work combines a 40-motion reproduction with video-reference integration, controlled per-clip adaptation, and before/after physical evaluation.</p>
+    <div class="resources"><a href="https://github.com/bcTiann/Uni-SuperMimic">Reproduction code &rarr;</a><a href="https://supermimic.github.io/">Original paper &amp; project &rarr;</a><a href="https://github.com/Motphys/Uni-SuperMimic">Upstream implementation &rarr;</a><a href="/research/supermimic-results.json">Results &amp; protocol (JSON) &rarr;</a></div>
   </header>
 
+  <section aria-labelledby="video-pipeline">
+    <h2 id="video-pipeline">From reference video to trained motion</h2>
+    <p><strong>RGB video &rarr; human-motion recovery &rarr; G1 reference &rarr; SuperMimic fine-tuning &rarr; MuJoCo evaluation.</strong></p>
+    <p>I integrated <a href="https://github.com/zju3dv/GVHMR">GVHMR</a> reconstruction and <a href="https://github.com/YanjieZe/GMR">GMR</a> retargeting with the controller&rsquo;s motion interface and training loop. My contribution covers reusable pipeline runners, timing and joint-coordinate conversion, reference-quality checks, pretrained checkpoint transfer, and matched before/after evaluation.</p>
+    <figure>
+      <video class="research-video" controls loop muted playsinline preload="metadata" poster="/assets/supermimic-video-adaptation.jpg" width="1280" height="444" aria-label="Actual MuJoCo tracking before and after 5,000 updates on a tennis-video-derived reference"><source src="/assets/supermimic-video-adaptation.mp4" type="video/mp4"><a href="/assets/supermimic-video-adaptation.mp4">Watch the adaptation comparison</a></video>
+      <figcaption>Tennis body-motion reference recovered from the <a href="https://github.com/ryanrudes/gvhmr/blob/e3876097a9c4d9c1758d058d9e70c64f0cdba4c4/docs/example_video/tennis.mp4">GVHMR example video</a>. Left: pretrained tracker; right: after 5,000 adaptation updates. Gray: actual MuJoCo policy trajectory; blue: the same video-derived reference. Both panels share the camera and timeline.</figcaption>
+    </figure>
+    <div class="table-scroll">
+      <table>
+        <caption>Normalized tracking return before and after 5,000 updates; a separate model is fine-tuned for each clip.</caption>
+        <thead><tr><th scope="col">Video-derived motion</th><th scope="col" class="number">Before</th><th scope="col" class="number">After</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Tennis serve</th><td class="number">0.696822</td><td class="number"><strong>0.835913</strong></td></tr>
+          <tr><th scope="row">Tai chi</th><td class="number">0.804489</td><td class="number"><strong>0.911659</strong></td></tr>
+          <tr><th scope="row">Dance</th><td class="number">0.707031</td><td class="number"><strong>0.861935</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Each run starts from the same 11,000-update LAFAN1 tracker, with 100 world-model-only updates followed by 4,900 actor updates and 400,000 new training transitions. All ten saved checkpoints were evaluated on the same video-derived reference from its first frame. For tennis, joint-angle RMSE fell from 0.188546 to 0.147728 radians at the final checkpoint.</p>
+    <p class="small">These are single-seed, per-video adaptation experiments. The references retain reconstruction errors, including height drift; the evaluation measures tracking of each training clip. The tennis example concerns body motion, without racket or ball interaction. The LAFAN1 results below are a separate reproduction experiment.</p>
+  </section>
+
   <section aria-labelledby="rollout">
-    <h2 id="rollout">Policy rollout</h2>
+    <h2 id="rollout">LAFAN1 motion-library reproduction</h2>
     <figure>
       <video class="research-video" controls loop muted playsinline preload="metadata" poster="/assets/supermimic-flip-getup-11000.png" width="960" height="540" aria-label="Actual MuJoCo aerial-turn and fall-and-get-up rollouts from my 11,000-update policy"><source src="/assets/supermimic-flip-getup-11000.mp4" type="video/mp4"><a href="/assets/supermimic-flip-getup-11000.mp4">Watch the policy rollouts</a></video>
       <figcaption>Two excerpts from the same 11,000-update policy: <code>dance1_subject1</code>, seconds 104–110 (aerial turn and landing), followed by <code>fallAndGetUp3_subject1</code>, seconds 62.5–71.5 (fall and get-up). Each rollout starts from frame zero before its extract. Gray: learned policy; blue: reference at its original global position.</figcaption>
@@ -113,7 +136,7 @@
     <p class="small">The comparison uses the <a href="https://github.com/Motphys/Uni-SuperMimic/tree/bc0f0f3499a12019ec0ea313ff37bbd0a70a6a04">fixed Motphys public revision</a>. The small 40-clip experiment is separate from the much larger motion library reported in the original SuperMimic paper.</p>
   </section>
 
-  <footer><a href="/#research">Baochen Tian &middot; Research &amp; projects</a> &middot; Results updated 25 October 2026</footer>
+  <footer><a href="/#research">Baochen Tian &middot; Research &amp; projects</a> &middot; Results updated 26 October 2026</footer>
 </main>
 </body>
 </html>

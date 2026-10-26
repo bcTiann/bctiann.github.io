@@ -27,15 +27,17 @@
 </section>
 <section id="research"><h2>Personal Projects</h2>
 <article id="supermimic"><div class="entry-top"><span class="type">Personal project</span><span class="date">October 2026</span></div>
-<h3>SuperMimic Reproduction</h3>
-<p>Trained and evaluated a humanoid motion-tracking controller based on <a href="https://github.com/Motphys/Uni-SuperMimic">UniSuperMimic</a>, a reproduction of <a href="https://supermimic.github.io/">SuperMimic</a>. The policy learns through imagined trajectories in a differentiable world model. I matched the public implementation’s network sizes and effective training budgets on 40 LAFAN1 motions retargeted to the Unitree G1.</p>
+<h3>SuperMimic Reproduction and Video-to-Robot Adaptation</h3>
+<p>Built and evaluated a pipeline connecting <a href="https://github.com/zju3dv/GVHMR">GVHMR</a> human-motion recovery, <a href="https://github.com/YanjieZe/GMR">GMR</a> retargeting to the Unitree G1, and SuperMimic fine-tuning in MuJoCo. This enables training on new video-derived motion targets beyond the bundled motion-capture library.</p>
+<p class="result-line">Improved tracking of tennis, tai chi and dance references in <strong>three separate video-adaptation experiments</strong>. <a href="research/supermimic.html?v=20261026-video#video-pipeline">Pipeline, before/after video &amp; results ↗</a></p>
+<p>The controller builds on <a href="https://github.com/Motphys/Uni-SuperMimic">UniSuperMimic</a>, a reproduction of <a href="https://supermimic.github.io/">SuperMimic</a>, which learns through imagined trajectories in a differentiable world model. I also reproduced its joint world-model and policy training with matched network sizes and effective training budgets on 40 LAFAN1/G1 motions.</p>
 <p class="result-line"><strong>40/40 reference motions completed</strong> in MuJoCo at the 11,000-update checkpoint, with a macro normalized return of <strong>0.826</strong>.</p>
 <p class="experiment-scope">Single-seed evaluation on the training motion library. The full run completed 12,000 updates; checkpoint results and the training protocol are in the experiment notes.</p>
 <figure class="research-figure">
 <video class="research-video" controls loop muted playsinline preload="metadata" poster="assets/supermimic-flip-getup-11000.png" width="960" height="540" aria-label="Aerial turn and fall-and-get-up tracking from the 11,000-update policy in MuJoCo"><source src="assets/supermimic-flip-getup-11000.mp4" type="video/mp4"><a href="assets/supermimic-flip-getup-11000.mp4">Watch the policy rollouts</a></video>
-<figcaption>Aerial turn and fall-and-get-up tracking with the same 11,000-update policy. Gray: learned policy; blue: reference, retaining its global position. <a href="research/supermimic.html?v=20261025-selected#rollout">Source clips and full results ↗</a></figcaption>
+<figcaption>LAFAN1 motion-library reproduction: aerial turn and fall-and-get-up tracking with the same 11,000-update policy. Gray: learned policy; blue: reference, retaining its global position. <a href="research/supermimic.html?v=20261026-video#rollout">Source clips and full results ↗</a></figcaption>
 </figure>
-<div class="project-links"><a class="project-link" href="https://github.com/bcTiann/Uni-SuperMimic">Code ↗</a><a class="project-link" href="research/supermimic.html?v=20261025-selected">Experiment notes ↗</a></div></article>
+<div class="project-links"><a class="project-link" href="https://github.com/bcTiann/Uni-SuperMimic">Reproduction code ↗</a><a class="project-link" href="research/supermimic.html?v=20261026-video">Experiment notes ↗</a></div></article>
 <article id="geora"><div class="entry-top"><span class="type">Personal project</span><span class="date">October 2026</span></div>
 <h3>GeoRA Reimplementation and GRPO Experiments</h3>
 <p>Reimplemented <a href="https://aclanthology.org/2026.acl-long.1110/">GeoRA</a> from the original paper for Qwen2.5-1.5B-Instruct and integrated it with TRL GRPO, including mixed-precision execution and checkpoint recovery. Compared GeoRA with LoRA under matched training settings and evaluated all 500 MATH500 questions.</p>
