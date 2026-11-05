@@ -44,7 +44,7 @@
     <a class="back" href="/#research">&larr; Back to research &amp; projects</a>
     <p class="eyebrow">PERSONAL PROJECT &middot; OCTOBER 2026</p>
     <h1>GeoRA Reimplementation</h1>
-    <p class="lead">I reimplemented geometry-aware low-rank adaptation for reinforcement learning with verifiable rewards, then compared GeoRA and LoRA under the same short training budget.</p>
+    <p class="lead">I reimplemented GeoRA for Qwen2.5-1.5B-Instruct, integrated it with GRPO training, and ran a small pilot comparison with LoRA.</p>
     <p>The method comes from <a href="https://aclanthology.org/2026.acl-long.1110/">Zhang et al., <em>GeoRA: Geometry-Aware Low-Rank Adaptation for RLVR</em> (ACL 2026)</a>. My work covers adapter implementation, GRPO training, controlled evaluation, and generation&ndash;training integration.</p>
     <div class="resources"><a href="https://github.com/bcTiann/geora-repro">Reimplementation code &rarr;</a><a href="https://aclanthology.org/2026.acl-long.1110/">Original paper &rarr;</a><a href="/research/geora-results.json">Results &amp; protocol (JSON) &rarr;</a></div>
   </header>
@@ -76,7 +76,7 @@
   </section>
 
   <section aria-labelledby="results">
-    <h2 id="results">MATH500 results</h2>
+    <h2 id="results">Pilot MATH500 comparison</h2>
     <div class="table-scroll">
       <table>
         <caption>Mathematical-equivalence accuracy; identical evaluation protocol for all four models.</caption>
@@ -90,7 +90,7 @@
       </table>
     </div>
     <div class="key-result">
-      <p><strong>GeoRA scored 3.0 percentage points above LoRA:</strong> 43 additional correct answers and 28 lost answers, a net gain of 15/500.</p>
+      <p>In this pilot, GeoRA scored 56.8% and LoRA 53.8%: 43 additional correct answers and 28 lost answers, a net gain of 15/500.</p>
       <p>Paired bootstrap 95% interval: &minus;0.2 to +6.2 points; exact two-sided McNemar <em>p</em> = 0.0959.</p>
     </div>
     <figure>
